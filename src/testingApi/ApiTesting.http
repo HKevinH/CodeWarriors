@@ -1,0 +1,27 @@
+
+# Spring Boot JWT Authentication
+POST {{host}}:{{port}}/login
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+
+
+### Create User
+POST {{host}}:{{port}}/register
+Content-Type: application/json
+
+{
+    "id": 0,
+    "username": "test",
+    "password": "test",
+    "email": "test@gmail.com",
+    "name": "test",
+    "role": "user",
+    "token" : "eyJhbGci",
+    "active" : 1
+}
+
+
