@@ -2,11 +2,12 @@ package com.server.codewarriors.service;
 
 import com.server.codewarriors.model.UserModel;
 import com.server.codewarriors.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -36,7 +37,9 @@ public class UserService {
         return null;
     }
 
-    public UserModel updateUser(UserModel user) {
+    public UserModel updateUser(UserModel user)  throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String password = user.getPassword();
+        user.setPassword(PasswordService.generateStrongPasswordHash(password));
         return userRepository.save(user);
     }
 
@@ -47,5 +50,19 @@ public class UserService {
             return userRepository.save(user);
         }
         return null;
+    }
+
+    public List <UserModel> getAllUser() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUserById(Long id) {
+        if (userRepository.existsById(id))
+        {
+            userRepository.deleteById(id);
+        }
+        else {
+            throw new RuntimeException("Usuario no encontrado con ID: " + id);
+        }
     }
 }

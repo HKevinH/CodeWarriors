@@ -1,13 +1,13 @@
 package com.server.codewarriors.controllers;
 
 
+import com.server.codewarriors.model.EventsModel;
 import com.server.codewarriors.model.UserModel;
 import com.server.codewarriors.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 //This Controller is used to users services
@@ -36,6 +36,41 @@ public class UserController {
             UserModel newUser = userService.loginUser(user.getUsername(), user.getPassword());
             return newUser;
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // This Function
+    @PostMapping("/update/user")
+    public UserModel updateUser(@RequestBody UserModel user)
+    {
+        try {
+            System.out.println(user);
+            return userService.updateUser(user);
+        }catch (Exception e ) {
+            return null;
+        }
+    }
+
+    //
+    @GetMapping("/getAllUsers")
+    public List<UserModel> getAllUsers() {
+        try {
+            return userService.getAllUser();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    @DeleteMapping("/users/delete/{id}")
+    public String deleteUserById(@PathVariable Long id)
+    {
+        try {
+            userService.deleteUserById(id);
+            return "User Delete ";
+        }
+        catch (Exception e) {
             return null;
         }
     }

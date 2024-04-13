@@ -18,10 +18,32 @@ Content-Type: application/json
     "username": "test",
     "password": "test",
     "email": "test@gmail.com",
-    "name": "test",
     "role": "user",
     "token" : "eyJhbGci",
     "active" : 1
 }
 
 
+### Create Update User
+POST {{host}}:{{port}}/update/user
+Content-Type: application/json
+
+{
+  "id": 0,
+  "username": "asdasd",
+  "password": "test",
+  "email": "test@gmail.com",
+  "role": "teacher",
+  "token" : "eyJhbGci",
+  "active" : 1
+}
+
+
+### Get All Users
+
+GET {{host}}:{{port}}/getAllUsers
+
+
+### Delete User By Id
+
+DELETE {{host}}:{{port}}/users/delete/0
