@@ -30,7 +30,7 @@ Content-Type: application/json
 
 {
   "id": 0,
-  "username": "asdasd",
+  "username": "casasas",
   "password": "test",
   "email": "test@gmail.com",
   "role": "teacher",

@@ -34,6 +34,10 @@ public class UserController {
         try {
             System.out.println(user + "user");
             UserModel newUser = userService.loginUser(user.getUsername(), user.getPassword());
+            if (newUser != null) {
+                return newUser;
+            }
+
             return newUser;
         } catch (Exception e) {
             return null;
