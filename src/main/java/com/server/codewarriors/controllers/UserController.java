@@ -5,6 +5,9 @@ import com.server.codewarriors.model.EventsModel;
 import com.server.codewarriors.model.UserModel;
 import com.server.codewarriors.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,8 +40,7 @@ public class UserController {
             if (newUser != null) {
                 return newUser;
             }
-
-            return newUser;
+            return null;
         } catch (Exception e) {
             return null;
         }
@@ -78,4 +80,25 @@ public class UserController {
             return null;
         }
     }
+
+    @GetMapping("/complete-registration")
+    public String completeRegistration(Model model, @AuthenticationPrincipal OAuth2User principal) {
+        try {
+            String provider = principal.getAttribute("sub");
+            String providerId = principal.getAttribute("id");
+            UserModel user = userService.registerOrGetUser(principal, provider);
+
+            model.addAttribute("userId", user.getId());
+            return "complete-registration";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/complete-registration")
+    public String completeRegistration(@RequestParam Long userId, @RequestParam String password) {
+        userService.updateUserPassword(userId, password);
+    return "Password updated successfully";
+    }
+
 }

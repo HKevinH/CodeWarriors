@@ -13,6 +13,8 @@ import lombok.Setter;
 @Setter
 @Entity
 public class UserModel {
+    private String provider;
+    private String providerId;
     private String username;
     @Setter
     private String password;
@@ -20,9 +22,11 @@ public class UserModel {
     private String email;
     private String role;
     private String token;
+    private String lastname;
     @Id
     private String id;
     private Integer active;
+
     public UserModel() {
     }
 
@@ -38,6 +42,7 @@ public class UserModel {
     public UserModel orElse(Object o) {
         return null;
     }
+
 
 }
 
