@@ -4,8 +4,8 @@ POST {{host}}:{{port}}/login
 Content-Type: application/json
 
 {
-    "username": "test",
-    "password": "test"
+    "username": "HkevinH",
+    "password": "kl3196704@gmail.com"
 }
 
 
@@ -47,3 +47,8 @@ GET {{host}}:{{port}}/getAllUsers
 ### Delete User By Id
 
 DELETE {{host}}:{{port}}/users/delete/0
+
+
+### Get User Oauth2
+
+GET {{host}}:{{port}}/user/oauth

@@ -1,16 +1,18 @@
 package com.server.codewarriors.controllers;
 
 
-import com.server.codewarriors.model.EventsModel;
 import com.server.codewarriors.model.UserModel;
+import com.server.codewarriors.repository.UserRepository;
 import com.server.codewarriors.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 //This Controller is used to users services
@@ -18,8 +20,14 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private  final UserRepository userRepository;
+    private final UserService userService;
 
+    @Autowired
+    public UserController(UserService userService, UserRepository userRepository) {
+        this.userService = userService;
+        this.userRepository = userRepository;
+    }
     @PostMapping("/register")
     public String registerUser(@RequestBody UserModel user) {
 
@@ -40,6 +48,10 @@ public class UserController {
             if (newUser != null) {
                 return newUser;
             }
+
+            UserModel user1 = userService.loginUser(user.getUsername(), user.getPassword());
+            System.out.println(user1 + "user1");
+
             return null;
         } catch (Exception e) {
             return null;
@@ -81,24 +93,22 @@ public class UserController {
         }
     }
 
-    @GetMapping("/complete-registration")
-    public String completeRegistration(Model model, @AuthenticationPrincipal OAuth2User principal) {
+    @PostMapping("/user/update")
+    public ResponseEntity<String> updateProfile(@RequestBody UserModel user, @AuthenticationPrincipal OAuth2User principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
         try {
-            String provider = principal.getAttribute("sub");
-            String providerId = principal.getAttribute("id");
-            UserModel user = userService.registerOrGetUser(principal, provider);
-
-            model.addAttribute("userId", user.getId());
-            return "complete-registration";
+            UserModel userBy = userRepository.findById(user.getId()).orElse(null);
+            if (userBy == null) {
+                UserModel register = userService.registerOrGetUser(principal, "google");
+            } else {
+                System.out.println("User: " + userBy.getPassword() + " " + userBy.getEmail() + " " + userBy.getId());
+                UserModel updateUser =  userService.updateUserPassword(userBy.getId(), user.getPassword(), user.getEmail(), user.getLastname()).orElse(null);
+            }
+            return ResponseEntity.ok("OK"   );
         } catch (Exception e) {
-            return "Error: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user: " + e.getMessage());
         }
     }
-
-    @PostMapping("/complete-registration")
-    public String completeRegistration(@RequestParam Long userId, @RequestParam String password) {
-        userService.updateUserPassword(userId, password);
-    return "Password updated successfully";
-    }
-
 }

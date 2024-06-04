@@ -13,15 +13,5 @@ public class EventsModel {
     private String description;
     private String date;
     private String author;
-
-    public EventsModel() {
-    }
-
-    public EventsModel(String id, String title, String description, String date, String author) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.date = date;
-        this.author = author;
-    }
+    private Long participants;
 }

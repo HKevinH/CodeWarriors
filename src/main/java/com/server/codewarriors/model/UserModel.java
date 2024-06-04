@@ -2,9 +2,13 @@ package com.server.codewarriors.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 
 // @Entity
@@ -13,31 +17,20 @@ import lombok.Setter;
 @Setter
 @Entity
 public class UserModel {
+    @Id
+    @GeneratedValue(strategy  = GenerationType.IDENTITY)
+    private Long id;
+
+    private Integer active;
     private String provider;
     private String providerId;
     private String username;
-    @Setter
     private String password;
-    @Setter
     private String email;
     private String role;
     private String token;
     private String lastname;
-    @Id
-    private String id;
-    private Integer active;
-
-    public UserModel() {
-    }
-
-    public UserModel(String username, String password, String email, String role, String token, String id) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.token = token;
-        this.id = id;
-    }
+    private Date date_last_login;
 
     public UserModel orElse(Object o) {
         return null;
